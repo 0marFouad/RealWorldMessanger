@@ -1,0 +1,12 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Messenger App with Video Streaming Feature",
+  "main": "index.js",
+  "scripts": {},
+  "author": "Omar Fouad",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
