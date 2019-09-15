@@ -13,7 +13,12 @@ class App extends React.Component{
     }
 
     render(){
-        return <div>Omar Dah sha8al</div>;
+        return (
+            <div className="App">
+                <div className="App__Aside"></div>
+                <div className="App__Form"></div>
+            </div>
+        );
     }
 }
 
