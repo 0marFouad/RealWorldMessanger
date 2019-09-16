@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import authentication from '../services/authentication';
 
 class login extends Component {
     constructor() {
         super();
 
         this.state = {
-            email: '',
+            username: '',
             password: ''
         };
 
@@ -15,14 +16,13 @@ class login extends Component {
 
     handleChange(e) {
         this.setState({
-            [e.target.name]: e.target.value;
+            [e.target.name]: e.target.value
     });
     }
 
     handleSubmit(e) {
+        authentication.login(this.state.username,this.state.password);
         e.preventDefault();
-
-        console.log('The form was submitted with the following data:');
         console.log(this.state);
     }
 
@@ -31,8 +31,8 @@ class login extends Component {
             <div className="FormCenter">
                 <form onSubmit={this.handleSubmit} className="FormFields" onSubmit={this.handleSubmit}>
                     <div className="FormField">
-                        <label className="FormField__Label" htmlFor="email">E-Mail Address</label>
-                        <input type="email" id="email" className="FormField__Input" placeholder="Enter your email" name="email" value={this.state.email} onChange={this.handleChange} />
+                        <label className="FormField__Label" htmlFor="email">Username</label>
+                        <input type="username" id="email" className="FormField__Input" placeholder="Enter your username" name="username" value={this.state.username} onChange={this.handleChange} />
                     </div>
 
                     <div className="FormField">

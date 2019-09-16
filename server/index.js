@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const handle = require('./handlers');
 const db = require('./models');
-const routes = require('./routes')
+const routes = require('./routes');
 
 const app = express();
 const port = process.env.PORT;
@@ -19,8 +19,8 @@ app.use(handle.errors);
 
 app.get('/', function(req,res){
     res.send("hello omar");
-})
+});
 
 app.use('/api/auth', routes.auth);
 
-app.listen(4000, console.log("Server is Up Now on PORT ${port}"));
+app.listen(4000, console.log(`Server is Up Now on PORT ${port}`));

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const host = 'http://localhost:4000/api'
+const host = 'http://localhost:4000/api';
 
 export const setToken = function (token) {
     if(token){
@@ -10,9 +10,11 @@ export const setToken = function (token) {
     }
 };
 
+
+
 export const call = async function (method, path, data) {
     const response = await axios[method](`${host}/${path}`, data);
     return response;
-}
+};
 
 export default {call, setToken};
