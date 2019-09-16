@@ -4,17 +4,11 @@ import api from './api';
 const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
 
 
-async function login(username, password) {
-
-    const result = await api.call('post', 'auth/login', {
-        username: username,
-        password: password
-    });
-
-    localStorage.setItem('currentUser', JSON.stringify(result.data));
-    currentUserSubject.next(result.data);
-
-    console.log(result.status);
+async function getMessages() {
+    api.setToken(JSON.parse(localStorage.getItem('currentUser').token));
+    const result = await api.call('get', 'chat/getmessages', {});
+    console.log(result);
+    return result;
 }
 
 async function logout() {

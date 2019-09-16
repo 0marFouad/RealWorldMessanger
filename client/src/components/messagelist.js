@@ -15,7 +15,18 @@ const DUMMY_DATA = [
     }
 ];
 
+
+
 class messagelist extends React.Component{
+    constructor() {
+        super();
+
+        this.state = {
+            messages: []
+        };
+
+    }
+
     render(){
         return (
             <div class="mesgs">
