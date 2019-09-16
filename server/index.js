@@ -3,7 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const handle = require('./handlers');
-const db = require('./models');
 const routes = require('./routes');
 
 const app = express();
@@ -22,5 +21,6 @@ app.get('/', function(req,res){
 });
 
 app.use('/api/auth', routes.auth);
+app.use('/api/chat', routes.messages);
 
 app.listen(4000, console.log(`Server is Up Now on PORT ${port}`));

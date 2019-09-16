@@ -21,8 +21,6 @@ exports.register = async function (req, res, next) {
 exports.login = async function (req, res, next) {
     try{
         const user = await db.User.findOne({username: req.body.username});
-        if(!user){
-        }
         const {id, username} = user;
         const valid = await user.comparePassword(req.body.password);
 

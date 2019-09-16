@@ -33,6 +33,6 @@ userSchema.methods.comparePassword = async function(attempt, next){
     }catch(err){
         next(err);
     }
-}
+};
 
 module.exports = mongoose.model('User', userSchema);

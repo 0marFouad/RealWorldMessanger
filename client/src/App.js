@@ -2,7 +2,7 @@ import React from 'react';
 import { HashRouter as Router, Route, Link, NavLink } from 'react-router-dom';
 import signup from './components/signup';
 import login from './components/login';
-import api from './services/api';
+import messagelist from './components/messagelist';
 import './App.css';
 import authentication from './services/authentication';
 
@@ -53,7 +53,12 @@ class App extends React.Component{
                         </div>
                     </div>
                     :
-                    <div>LoggedIn</div>
+                    <div className="App">
+                        <div className="">
+                            <Route exact path="/chat" component={messagelist}>
+                            </Route>
+                        </div>
+                    </div>
                 }
             </Router>
         );
