@@ -23,4 +23,4 @@ app.get('/', function(req,res){
 app.use('/api/auth', routes.auth);
 app.use('/api/chat', routes.messages);
 
-app.listen(4000, console.log(`Server is Up Now on PORT ${port}`));
+app.listen(4040, console.log(`Server is Up Now on PORT ${port}`));

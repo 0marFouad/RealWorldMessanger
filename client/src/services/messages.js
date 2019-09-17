@@ -3,22 +3,14 @@ import api from './api';
 
 const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
 
-
-async function getMessages() {
-    api.setToken(JSON.parse(localStorage.getItem('currentUser').token));
-    const result = await api.call('get', 'chat/getmessages', {});
-    console.log(result);
-    return result;
-}
-
-async function logout() {
-    localStorage.removeItem('currentUser');
-    currentUserSubject.next(null);
+ function getMessages() {
+    api.setToken(JSON.parse(localStorage.getItem('currentUser')).token);
+     const request = api.call('get', 'chat/getmessages', {});
+     return request;
 }
 
 export default {
-    login,
-    logout,
+    getMessages,
     currentUser: currentUserSubject.asObservable(),
     get currentUserValue () { return currentUserSubject.value }
 };
