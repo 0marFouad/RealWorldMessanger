@@ -54,10 +54,8 @@ class App extends React.Component{
                     </div>
                     :
                     <div className="App">
-                        <div className="">
                             <Route exact path="/chat" component={messagelist}>
                             </Route>
-                        </div>
                     </div>
                 }
             </Router>

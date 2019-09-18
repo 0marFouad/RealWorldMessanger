@@ -6,6 +6,14 @@ const handle = require('./handlers');
 const routes = require('./routes');
 
 const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+const chatOperations = require('./handlers/chat-socket');
+chatOperations.chatSocket(io);
+server.listen(5000,() => {
+   console.log("Socket Server is ready");
+});
+
 const port = process.env.PORT;
 
 app.use(cors());

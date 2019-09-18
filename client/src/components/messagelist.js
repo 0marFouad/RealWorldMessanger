@@ -1,20 +1,25 @@
 import React from 'react';
 import messages from '../services/messages';
+import io from 'socket.io-client';
+import NewMessageArea from './newMessageArea';
 
 const deepai = require('deepai');
-deepai.setApiKey('');
+deepai.setApiKey('4dbab915-7844-472f-8712-f0e237b770a3');
 
 class messagelist extends React.Component{
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            messages: [],
-            newMessage: ''
+            messages: []
         };
+        this.scrollToBottomY = 0;
         this.loadData = this.loadData.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.sendMessage = this.sendMessage.bind(this);
         this.loadData();
+        this.socket = io('http://localhost:5000');
+    }
+
+    componentDidMount(){
+
     }
 
     loadData() {
@@ -26,30 +31,29 @@ class messagelist extends React.Component{
         });
     }
 
-    handleChange(e) {
+    handleMessageArrival(data){
         this.setState({
-            newMessage: e.target.value
+            messages: [...this.state.messages, { ...data }]
         });
     }
 
-    async sendMessage(event){
-        console.log(process.env.sentiment_analysis_api);
-        if(event.keyCode == 13 || event.which == 13 || event.which == null){
-            console.log(this.state.newMessage.length);
-            if(this.state.newMessage.length > 0){
-                var resp = await deepai.callStandardApi("sentiment-analysis", {
-                    text: this.state.newMessage,
-                });
-                console.log(resp);
-            }
-        }
+    scrollToBottom = () => {
+        this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+    }
+
+    componentDidMount() {
+        this.scrollToBottom();
+    }
+
+    componentDidUpdate() {
+        this.scrollToBottom();
     }
 
     render(){
         let messages = this.state.messages;
         return (
-            <div class="mesgs">
-                <div class="msg_history">
+            <div className="mesgs">
+                <div className="msg_history">
                     {messages.map((message) => {
                         return message.sender === JSON.parse(localStorage.getItem('currentUser')).id ?
                             <div className="outgoing_msg">
@@ -71,22 +75,18 @@ class messagelist extends React.Component{
                                 </div>
                             </div>
                     })}
-                    <div class="incoming_msg">
-                        <div class="incoming_msg_img"> <img src={require("../sad.png")} alt="sunil"></img></div>
-                        <div class="received_msg">
-                            <div class="received_withd_msg">
+                    <div className="incoming_msg">
+                        <div className="incoming_msg_img"> <img src={require("../sad.png")} alt="sunil"></img></div>
+                        <div className="received_msg">
+                            <div className="received_withd_msg">
                                 <p>Test which is a new approach to have all
                                     solutions</p>
-                                <span class="time_date"> 11:01 AM    |    June 9</span></div>
+                                <span className="time_date"> 11:01 AM    |    June 9</span></div>
                         </div>
                     </div>
+                    <div ref={(el) => { this.messagesEnd = el; }}></div>
                 </div>
-                <div class="type_msg">
-                    <div class="input_msg_write">
-                        <input type="text" class="write_msg" placeholder="Type a message"  value={this.state.newMessage} onKeyPress={this.sendMessage} onChange={this.handleChange} />
-                        <button onClick={this.sendMessage} class="msg_send_btn" type="button"><img src={require('../icon.png')} alt="IMAawGE"></img></button>
-                    </div>
-                </div>
+                <NewMessageArea handleMessageArrival={this.handleMessageArrival.bind(this)} />
             </div>
         )
     }
