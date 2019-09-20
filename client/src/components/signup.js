@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import api from '../services/api';
+import authentication from '../services/authentication';
 
 class signup extends Component {
     constructor() {
@@ -9,6 +11,9 @@ class signup extends Component {
             password: '',
             name: ''
         };
+        if (authentication.currentUserValue) {
+            this.props.history.push('/chat');
+        }
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -22,6 +27,12 @@ class signup extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
+        authentication.signup(this.state.name,this.state.password,this.state.email).then(
+            () => {
+                const { from } = this.props.location.state || { from: { pathname: "/chat" } };
+                this.props.history.push(from);
+            }
+        );
         console.log('The form was submitted with the following data:');
         console.log(this.state);
     }

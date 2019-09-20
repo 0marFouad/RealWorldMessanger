@@ -1,6 +1,5 @@
 import React from 'react';
 import messages from '../services/messages';
-import io from 'socket.io-client';
 import NewMessageArea from './newMessageArea';
 
 const deepai = require('deepai');
@@ -12,13 +11,11 @@ class messagelist extends React.Component{
         this.state = {
             messages: []
         };
-        this.scrollToBottomY = 0;
         this.loadData = this.loadData.bind(this);
         this.loadData();
-        this.socket = io('http://localhost:5000');
     }
 
-    componentDidMount(){
+    check(){
 
     }
 
@@ -39,7 +36,7 @@ class messagelist extends React.Component{
 
     scrollToBottom = () => {
         this.messagesEnd.scrollIntoView({ behavior: "smooth" });
-    }
+    };
 
     componentDidMount() {
         this.scrollToBottom();
@@ -75,15 +72,6 @@ class messagelist extends React.Component{
                                 </div>
                             </div>
                     })}
-                    <div className="incoming_msg">
-                        <div className="incoming_msg_img"> <img src={require("../sad.png")} alt="sunil"></img></div>
-                        <div className="received_msg">
-                            <div className="received_withd_msg">
-                                <p>Test which is a new approach to have all
-                                    solutions</p>
-                                <span className="time_date"> 11:01 AM    |    June 9</span></div>
-                        </div>
-                    </div>
                     <div ref={(el) => { this.messagesEnd = el; }}></div>
                 </div>
                 <NewMessageArea handleMessageArrival={this.handleMessageArrival.bind(this)} />

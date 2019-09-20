@@ -1,5 +1,5 @@
 import React from 'react';
-import io from 'socket.io-client';
+import socket from '../services/client-socket';
 
 const deepai = require('deepai');
 deepai.setApiKey('4dbab915-7844-472f-8712-f0e237b770a3');
@@ -13,30 +13,13 @@ class newMessageArea extends React.Component{
         this.textInput = React.createRef();
         this.handleChange = this.handleChange.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
-        this.socket = io('http://localhost:5000');
     }
+
+
 
     componentDidMount(){
         let handleMessageArrival = this.props.handleMessageArrival;
-
-        this.socket.on('connect', () => {
-            console.log('Socket Connected');
-            this.socket.emit('newOnlineUser', JSON.parse(localStorage.getItem('currentUser')).id);
-        });
-
-        this.socket.on('newOnlineUser', (data) =>{
-            //add user to your online list
-        });
-
-        //when new message arrive
-        this.socket.on('message', (data) => {
-            console.log("Client Recieved "+ data);
-            handleMessageArrival(data);
-        });
-
-        this.socket.on('disconnect', () => {
-            console.log('Socket Disconnected')
-        });
+        socket.handleRecieveMessage(handleMessageArrival);
     }
 
     handleChange(e) {
@@ -54,15 +37,22 @@ class newMessageArea extends React.Component{
                 var resp = await deepai.callStandardApi("sentiment-analysis", {
                     text: this.state.newMessage,
                 });
-                console.log(resp);
+                console.log(resp.output[0]);
+                if(resp.output[0] === "Verynegative"){
+                    resp.output[0] = "Negative";
+                }
+                if(resp.output[0] === "Verypositive"){
+                    resp.output[0] = "Positive";
+                }
+                console.log(resp.output[0]);
                 let data = {
                     text: this.state.newMessage,
                     sender: JSON.parse(localStorage.getItem('currentUser')).id,
                     sendername: JSON.parse(localStorage.getItem('currentUser')).username,
-                    senderstate: "happy",
+                    senderstate: resp.output[0],
                     created_at:new Date().getTime()
                 };
-                this.socket.emit('message', data);
+                socket.emitMessage(data);
                 this.setState({
                    newMessage: ''
                 });

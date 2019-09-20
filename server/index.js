@@ -6,13 +6,9 @@ const handle = require('./handlers');
 const routes = require('./routes');
 
 const app = express();
-const server = require('http').createServer(app);
-const io = require('socket.io')(server);
-const chatOperations = require('./handlers/chat-socket');
-chatOperations.chatSocket(io);
-server.listen(5000,() => {
-   console.log("Socket Server is ready");
-});
+const socket = require('socket.io');
+const chatOperations = require('./handlers/server-socket');
+
 
 const port = process.env.PORT;
 
@@ -24,6 +20,7 @@ app.use(bodyParser.urlencoded({
 app.use(handle.notFound);
 app.use(handle.errors);
 
+
 app.get('/', function(req,res){
     res.send("hello omar");
 });
@@ -31,4 +28,6 @@ app.get('/', function(req,res){
 app.use('/api/auth', routes.auth);
 app.use('/api/chat', routes.messages);
 
-app.listen(4040, console.log(`Server is Up Now on PORT ${port}`));
+var server = app.listen(4040, console.log(`Server is Up Now on PORT ${port}`));
+var io = socket(server);
+chatOperations.chatSocket(io);

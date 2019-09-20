@@ -16,17 +16,16 @@ exports.register = async function (req, res, next) {
         }
         next(err);
     }
-}
+};
 
 exports.login = async function (req, res, next) {
     try{
+        console.log(req);
         const user = await db.User.findOne({username: req.body.username});
         const {id, username} = user;
         const valid = await user.comparePassword(req.body.password);
-
         if(valid){
             const token = jwt.sign({id, username}, process.env.SECRET);
-
             res.json({
                 id,
                 username,

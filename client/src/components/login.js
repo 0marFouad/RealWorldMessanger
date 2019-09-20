@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import authentication from '../services/authentication';
 
 class login extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             username: '',
             password: ''
         };
+        if (authentication.currentUserValue) {
+            this.props.history.push('/chat');
+        }
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -21,7 +25,13 @@ class login extends Component {
     }
 
     handleSubmit(e) {
-        authentication.login(this.state.username,this.state.password);
+        authentication.login(this.state.username,this.state.password)
+            .then(
+                () => {
+                    const { from } = this.props.location.state || { from: { pathname: "/chat" } };
+                    this.props.history.push(from);
+                }
+            );
         e.preventDefault();
         console.log(this.state);
     }
@@ -49,4 +59,4 @@ class login extends Component {
     }
 }
 
-export default login;
+export default withRouter(login);
